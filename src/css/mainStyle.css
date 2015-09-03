@@ -1,0 +1,242 @@
+html, body{
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	font-family: Arial, "WenQuanYi Zen Hei", "Microsoft JhengHei", 微軟正黑體, sans-serif;
+}
+
+body {
+	background: #bdda0f;
+	background: -webkit-radial-gradient(#cde82c 10%, #bdda0f 80%);
+	background: -o-radial-gradient(#cde82c 10%, #bdda0f 80%);
+	background: -moz-radial-gradient(#cde82c 10%, #bdda0f 80%);
+	background: radial-gradient(#cde82c 10%, #bdda0f 80%);
+}
+
+.nosupport{
+	font-family: Arial, "WenQuanYi Zen Hei", "Microsoft JhengHei", 微軟正黑體, sans-serif;
+	font-size: 22px;
+	color: #fff;
+	width:300px;
+	margin: auto;
+	margin-top: 30px;
+    padding: 15px;
+    border: solid 6px;
+}
+
+.nosupport img {
+	width: 100%;
+	margin: auto;
+    margin-bottom: 15px;
+    max-width: 300px;
+}
+
+#container {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	position: absolute;
+}
+
+.drag{
+	position: absolute;
+	border: solid 10px #cde82c;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	pointer-events:none;
+}
+
+.drag.hover{
+	border: solid 10px #F05A2B;
+}
+
+.triangle {
+	width: 500px;
+	height: 700px;
+	position: absolute;
+
+	/*Chrome,Safari*/
+	-webkit-clip-path: polygon(500px 0px,225px 700px,0px 0px);
+	/*Firefox*/
+	clip-path: url(clip.svg#svgClip2);
+
+	background: -moz-linear-gradient(-60deg, rgba(167,204,5,1) 0%, rgba(167,204,5,0) 50%, rgba(167,204,5,0) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(167,204,5,1)), color-stop(50%,rgba(167,204,5,0)), color-stop(100%,rgba(167,204,5,0))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(-60deg, rgba(167,204,5,1) 0%,rgba(167,204,5,0) 50%,rgba(167,204,5,0) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(-60deg, rgba(167,204,5,1) 0%,rgba(167,204,5,0) 50%,rgba(167,204,5,0) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(-60deg, rgba(167,204,5,1) 0%,rgba(167,204,5,0) 50%,rgba(167,204,5,0) 100%); /* IE10+ */
+	background: linear-gradient(120deg, rgba(167,204,5,1) 0%,rgba(167,204,5,0) 50%,rgba(167,204,5,0) 100%); /* W3C */
+}
+
+.rotate-25{
+	-ms-transform: rotate(-25deg); /* IE 9 */
+    -webkit-transform: rotate(-25deg); /* Chrome, Safari, Opera */
+    transform: rotate(-25deg);
+}
+
+.box{
+	width:200px;
+	height:200px;
+	background: rgba(167,204,5,0.3);
+	position: absolute;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	/*
+	-webkit-filter: blur(1px);
+	-moz-filter: blur(1px);
+	-o-filter: blur(1px);
+	-ms-filter: blur(1px);
+	filter: blur(1px);
+	*/
+	background: -webkit-radial-gradient(rgba(167,204,5,0.1) 0%, rgba(167,204,5,0.2) 100%);
+	background: -o-radial-gradient(rgba(167,204,5,0.1) 0%, rgba(167,204,5,0.2) 100%);
+	background: -moz-radial-gradient(rgba(167,204,5,0.1) 0%, rgba(167,204,5,0.2) 100%);
+	background: radial-gradient(rgba(167,204,5,0.1) 0%, rgba(167,204,5,0.2) 100%);
+}
+
+
+.cover {
+	width:400px;
+	height:400px;
+	position: absolute;
+	top: 0;
+	margin: -12px 0 0 -12px;
+
+	/*Chrome,Safari*/
+	-webkit-clip-path: polygon(0px 80px,400px 260px,400px 0px,0px 0px);
+	/*Firefox*/
+	clip-path: url(clip.svg#svgClip);
+	
+	
+	background: -moz-linear-gradient(-290deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 60%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(255,255,255,0.8)), color-stop(60%,rgba(255,255,255,0)), color-stop(100%,rgba(167,204,5,0))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(-290deg, rgba(255,255,255,0.8) 0%,rgba(255,255,255,0) 60%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(-290deg, rgba(255,255,255,0.8) 0%,rgba(255,255,255,0) 60%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(-290deg, rgba(255,255,255,0.8) 0%,rgba(255,255,255,0) 60%,rgba(255,255,255,0) 100%); /* IE10+ */
+	background: linear-gradient(70deg, rgba(255,255,255,0.8) 0%,rgba(255,255,255,0) 60%,rgba(255,255,255,0) 100%); /* W3C */
+	
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	
+}
+
+.paper {
+	width:300px;
+	height:300px;
+	background: #fff;
+	padding: 13px;
+	-webkit-border-radius: 13px;
+	-moz-border-radius: 13px;
+	border-radius: 13px;
+}
+
+.boy .demo{
+	background: #afafaf;
+	background-image: url(../images/boy_demo.gif) !important;
+	width: 300px;
+	height: 300px;
+}
+
+.girl .demo1{
+	background: #afafaf;
+	background-image: url(../images/girl_demo1.gif) !important;
+	width: 300px;
+	height: 300px;
+}
+
+.girl .demo2{
+	background: #afafaf;
+	background-image: url(../images/girl_demo2.gif) !important;
+	width: 300px;
+	height: 300px;
+}
+
+.girl .demo3{
+	background: #afafaf;
+	background-image: url(../images/girl_demo3.gif) !important;
+	width: 300px;
+	height: 300px;
+}
+
+
+.boy, .girl {
+	position: absolute;
+}
+
+
+#gifArea {
+	width:470px;
+	height:470px;
+	border: solid #fff 12px;
+	margin:30px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	background-color: #cccccc;
+	background-image: url(../images/drag.jpg);
+}
+
+#gifArea.hover{
+	border: solid #fff 12px;
+}
+
+#gifArea .cover{
+	width:470px;
+	height:470px;
+	position: absolute;
+	top: initial;
+	margin: 0;
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+	opacity: 0.5;
+}
+
+#bitmap, #gif {
+	width:470px;
+	height:470px;
+	position: absolute;
+	
+}
+#gif {
+	display: none;
+}
+
+#copy-button {
+	z-index: 10;
+	position: relative;
+	width:190px;
+	height:50px;
+	border:solid 5px #fff;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	color:#fff;
+	background: #B5D50B;
+	font-family: Arial, "WenQuanYi Zen Hei", "Microsoft JhengHei", 微軟正黑體, sans-serif;
+	font-size: 16px;
+	display: none;
+	outline: none; 
+}
+#copy-button:hover {
+	background: #9EBB01;
+}
+
+#copyMsg .modal-content{
+	text-align: center;
+	padding:10px 10px;
+	background-color:#B5D50B;
+	color:#fff;
+	font-family: Arial, "WenQuanYi Zen Hei", "Microsoft JhengHei", 微軟正黑體, sans-serif;
+}
+
+* {
+    -webkit-box-sizing: initial;
+    -moz-box-sizing: initial;
+    box-sizing: initial;
+}
