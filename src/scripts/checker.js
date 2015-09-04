@@ -1,6 +1,6 @@
 require("imports?this=>window!./webpack-ie8.js");
 require("../css/bootstrap.min.css");
-require("../css/mainStyle.css");
+require('!style!css!sass!../css/mainStyle.scss');
 
 //require("script!./modernizr.custom.82438.js");
 require("imports?this=>window!modernizr");

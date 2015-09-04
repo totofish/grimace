@@ -1,36 +1,63 @@
+$green-color1: #bdda0f;
+$green-color2: #cde82c;
+$green-color3: #9EBB01;
+$gray-color1: #afafaf;
+$gray-color2: #cccccc;
+$white-color: #fff;
+$primary-font: Arial, "WenQuanYi Zen Hei", "Microsoft JhengHei", 微軟正黑體, sans-serif;
+$gif-size: 300px;
+
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+}
+
+@mixin radial-gradient($from, $fromPercent, $to, $toPercent) {
+	background: -moz-radial-gradient(center, circle cover, $from $fromPercent, $to $toPercent);
+	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop($fromPercent, $from), color-stop($toPercent, $to));
+	background: -webkit-radial-gradient(center, circle cover, $from $fromPercent, $to $toPercent);
+	background: -o-radial-gradient(center, circle cover, $from $fromPercent, $to $toPercent);
+	background: -ms-radial-gradient(center, circle cover, $from $fromPercent, $to $toPercent);
+	background: radial-gradient(center, circle cover, $from $fromPercent, $to $toPercent);
+	background-color: $from;
+}
+
+
+
 html, body{
 	width: 100%;
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	font-family: Arial, "WenQuanYi Zen Hei", "Microsoft JhengHei", 微軟正黑體, sans-serif;
+	font-family: $primary-font;
 }
 
 body {
-	background: #bdda0f;
-	background: -webkit-radial-gradient(#cde82c 10%, #bdda0f 80%);
-	background: -o-radial-gradient(#cde82c 10%, #bdda0f 80%);
-	background: -moz-radial-gradient(#cde82c 10%, #bdda0f 80%);
-	background: radial-gradient(#cde82c 10%, #bdda0f 80%);
+	background: $green-color1;
+	@include radial-gradient($green-color2, 10%, $green-color1, 80%);
 }
 
 .nosupport{
-	font-family: Arial, "WenQuanYi Zen Hei", "Microsoft JhengHei", 微軟正黑體, sans-serif;
+	font-family: $primary-font;
 	font-size: 22px;
-	color: #fff;
-	width:300px;
+	color: $white-color;
+	width:$gif-size;
 	margin: auto;
 	margin-top: 30px;
     padding: 15px;
     border: solid 6px;
+
+    img {
+    	width: 100%;
+		margin: auto;
+	    margin-bottom: 15px;
+	    max-width: $gif-size;
+    }
 }
 
-.nosupport img {
-	width: 100%;
-	margin: auto;
-    margin-bottom: 15px;
-    max-width: 300px;
-}
 
 #container {
 	width: 100%;
@@ -41,17 +68,18 @@ body {
 
 .drag{
 	position: absolute;
-	border: solid 10px #cde82c;
+	border: solid 10px $green-color2;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
 	pointer-events:none;
+
+	&.hover{
+		border: solid 10px #F05A2B;
+	}
 }
 
-.drag.hover{
-	border: solid 10px #F05A2B;
-}
 
 .triangle {
 	width: 500px;
@@ -82,20 +110,8 @@ body {
 	height:200px;
 	background: rgba(167,204,5,0.3);
 	position: absolute;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	/*
-	-webkit-filter: blur(1px);
-	-moz-filter: blur(1px);
-	-o-filter: blur(1px);
-	-ms-filter: blur(1px);
-	filter: blur(1px);
-	*/
-	background: -webkit-radial-gradient(rgba(167,204,5,0.1) 0%, rgba(167,204,5,0.2) 100%);
-	background: -o-radial-gradient(rgba(167,204,5,0.1) 0%, rgba(167,204,5,0.2) 100%);
-	background: -moz-radial-gradient(rgba(167,204,5,0.1) 0%, rgba(167,204,5,0.2) 100%);
-	background: radial-gradient(rgba(167,204,5,0.1) 0%, rgba(167,204,5,0.2) 100%);
+	@include border-radius(5px);
+	@include radial-gradient(rgba(167,204,5,0.1), 0%, rgba(167,204,5,0.2), 100%);
 }
 
 
@@ -119,48 +135,45 @@ body {
 	background: -ms-linear-gradient(-290deg, rgba(255,255,255,0.8) 0%,rgba(255,255,255,0) 60%,rgba(255,255,255,0) 100%); /* IE10+ */
 	background: linear-gradient(70deg, rgba(255,255,255,0.8) 0%,rgba(255,255,255,0) 60%,rgba(255,255,255,0) 100%); /* W3C */
 	
-	-webkit-border-radius: 15px;
-	-moz-border-radius: 15px;
-	border-radius: 15px;
+	@include border-radius(15px);
 	
 }
 
 .paper {
-	width:300px;
-	height:300px;
-	background: #fff;
+	width:$gif-size;
+	height:$gif-size;
+	background: $white-color;
 	padding: 13px;
-	-webkit-border-radius: 13px;
-	-moz-border-radius: 13px;
-	border-radius: 13px;
+
+	@include border-radius(13px);
 }
 
 .boy .demo{
-	background: #afafaf;
+	background: $gray-color1;
 	background-image: url(../images/boy_demo.gif) !important;
-	width: 300px;
-	height: 300px;
+	width: $gif-size;
+	height: $gif-size;
 }
 
-.girl .demo1{
-	background: #afafaf;
-	background-image: url(../images/girl_demo1.gif) !important;
-	width: 300px;
-	height: 300px;
-}
-
-.girl .demo2{
-	background: #afafaf;
-	background-image: url(../images/girl_demo2.gif) !important;
-	width: 300px;
-	height: 300px;
-}
-
-.girl .demo3{
-	background: #afafaf;
-	background-image: url(../images/girl_demo3.gif) !important;
-	width: 300px;
-	height: 300px;
+.girl {
+ 	.demo1 {
+		background: $gray-color1;
+		background-image: url(../images/girl_demo1.gif) !important;
+		width: $gif-size;
+		height: $gif-size;
+	}
+	.demo2{
+		background: $gray-color1;
+		background-image: url(../images/girl_demo2.gif) !important;
+		width: $gif-size;
+		height: $gif-size;
+	}
+	.demo3{
+		background: $gray-color1;
+		background-image: url(../images/girl_demo3.gif) !important;
+		width: $gif-size;
+		height: $gif-size;
+	}
 }
 
 
@@ -172,37 +185,34 @@ body {
 #gifArea {
 	width:470px;
 	height:470px;
-	border: solid #fff 12px;
+	border: solid $white-color 12px;
 	margin:30px;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	background-color: #cccccc;
+	@include border-radius(10px);
+	background-color: $gray-color2;
 	background-image: url(../images/drag.jpg);
+
+	&.hover{
+		border: solid $white-color 12px;
+	}
+
+	.cover{
+		width:470px;
+		height:470px;
+		position: absolute;
+		top: initial;
+		margin: 0;
+		@include border-radius(0px);
+		opacity: 0.5;
+	}
 }
 
-#gifArea.hover{
-	border: solid #fff 12px;
-}
-
-#gifArea .cover{
-	width:470px;
-	height:470px;
-	position: absolute;
-	top: initial;
-	margin: 0;
-	-webkit-border-radius: 0px;
-	-moz-border-radius: 0px;
-	border-radius: 0px;
-	opacity: 0.5;
-}
 
 #bitmap, #gif {
 	width:470px;
 	height:470px;
 	position: absolute;
-	
 }
+
 #gif {
 	display: none;
 }
@@ -212,27 +222,26 @@ body {
 	position: relative;
 	width:190px;
 	height:50px;
-	border:solid 5px #fff;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	color:#fff;
-	background: #B5D50B;
-	font-family: Arial, "WenQuanYi Zen Hei", "Microsoft JhengHei", 微軟正黑體, sans-serif;
+	border:solid 5px $white-color;
+	@include border-radius(10px);
+	color:$white-color;
+	background: $green-color1;
+	font-family: $primary-font;
 	font-size: 16px;
 	display: none;
-	outline: none; 
-}
-#copy-button:hover {
-	background: #9EBB01;
+	outline: none;
+
+	&:hover {
+		background: $green-color3;
+	}
 }
 
 #copyMsg .modal-content{
 	text-align: center;
 	padding:10px 10px;
-	background-color:#B5D50B;
-	color:#fff;
-	font-family: Arial, "WenQuanYi Zen Hei", "Microsoft JhengHei", 微軟正黑體, sans-serif;
+	background-color: $green-color1;
+	color:$white-color;
+	font-family: $primary-font;
 }
 
 * {

@@ -47,6 +47,7 @@ var config = {
     loaders: [
       //{ test: require.resolve('jquery'), loader: 'expose?jQuery' },
       { test: /\.css$/, loader: 'style-loader!css-loader' },
+      { test: /\.scss$/, loader: 'style!css!sass' },
       //{ test: /\.html$/, name: "mandrillTemplates", loader: 'raw!html-minify' },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
