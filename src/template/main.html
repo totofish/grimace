@@ -44,18 +44,21 @@
 		<canvas id="bitmap"></canvas>
 		<img id="gif">
 	</div>
-	<!-- copy -->
-	<button id="copy-button" data-clipboard-text="" title="分享成果">分享成果</button>
+	<!-- share -->
+	<button id="share-button" data-clipboard-text="" title="分享成果">分享成果</button>
 </div>
 
 <div class="drag"></div>
 
 
-<div class="modal fade" id="copyMsg" tabindex="-1" role="dialog" >
+<div class="modal fade" id="msg" tabindex="-1" role="dialog" >
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       ...
     </div>
   </div>
 </div>
+
+<input type="file" id="upload-picture" accept="image/*" multiple="multiple" style="display:none;">
+
 

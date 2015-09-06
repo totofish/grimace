@@ -1,3 +1,5 @@
+'use strict';
+
 require("imports?this=>window!TweenMax");
 require("imports?this=>window!TimelineMax");
 require("imports?this=>window!createjs");
@@ -13,39 +15,34 @@ require("imports?this=>window!CSS3DRenderer");
 require("script!./help.js");
 
 
-'use strict';
 (function(){
-	
-	var camera, scene, renderer, area;
-	var objects = [];
+	var introControl;
 
 	window.init = function init(){
-		//$('body').load( "template/main.html", initialize );
 		$('body').html( require("html!../template/main.html") );
-		initialize();
+		introControl = initialize();
+		gifJS();
 	}
 
-
+	// 初始動態相關
 	function initialize(){
-		TweenMax.set(".t1",{rotationZ:-55+Math.random()*30, y:-250, x:-100, transformOrigin:"50% 50%"});
-		TweenMax.set(".t2",{rotationZ:40+Math.random()*30, y:-200, x:$(window).width()-300, transformOrigin:"50% 50%"});
-		TweenMax.set(".t3",{rotationZ:150+Math.random()*30, y:$(window).height()-400, x:$(window).width()/2 - 200, transformOrigin:"50% 50%"});
-		TweenMax.set(".t4",{rotationZ:220+Math.random()*30, y:$(window).height()-500, x: -100, transformOrigin:"50% 50%"});
+		var camera, scene, renderer, area;
+		var playing = false;
 
 		camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
 		camera.position.x = 1000;
 		camera.position.y = 1000;
 		camera.position.z = -800;
-
 		scene = new THREE.Scene();
 		area = new THREE.Object3D();
+		var sw = screen.width;
+		var sh = screen.height;
+
+		// 產生背景小方塊
 		for(var i=0; i<130; i++){
 			$('#boxArea').append($('<div class="box"></div>'));
 		}
-		var elements = $('.box');
-		var sw = screen.width;
-		var sh = screen.height;
-		$.each(elements, function(index, element){
+		$.each($('.box'), function(index, element){
 			var object = new THREE.CSS3DObject( element );
 			object.position.x = Math.random() * sw*6 - sw*3;
 			object.position.y = Math.random() * sh*6 - sh*3;
@@ -55,6 +52,7 @@ require("script!./help.js");
 			object.rotation.z = Math.random();
 			area.add(object);
 		});
+
 		// boy
 		var boyArea = new THREE.Object3D();
 		boyArea.position.z = -750;
@@ -125,6 +123,7 @@ require("script!./help.js");
 		helpArea.rotation.x = 0;
 		helpArea.rotation.y = 2.3;
 		helpArea.rotation.z = 0;
+		var help = new Help();
 
 		// gifArea
 		var gifArea = new THREE.CSS3DObject( $('#gifArea')[0] );
@@ -135,8 +134,8 @@ require("script!./help.js");
 		gifArea.rotation.y = 0;
 		gifArea.rotation.z = 1;
 
-		// COPY
-		var copyArea = new THREE.CSS3DObject( $('#copy-button')[0] );
+		// Share
+		var copyArea = new THREE.CSS3DObject( $('#share-button')[0] );
 		copyArea.position.x = -600;
 		copyArea.position.y = -215;
 		copyArea.position.z = 520;
@@ -150,81 +149,107 @@ require("script!./help.js");
 		area.add(gifArea);
 		area.add(copyArea);
 		scene.add( area );
+
 		renderer = new THREE.CSS3DRenderer();
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		renderer.domElement.style.position = 'absolute';
 		document.getElementById( 'container' ).appendChild( renderer.domElement );
 
-		var tl = new TimelineMax();
-		tl.to(camera.position, 2, {delay:1, x:0, y:0, z:800, ease: Power2.easeInOut, onComplete:function(){$(window).trigger('resize');} });
-		tl.to(boyArea.rotation, 10, {y:-0.2, z:0.1}, "-=2");
-		tl.add( TweenMax.to(camera.rotation, 2, {x:0, y:-2, ease: Power2.easeInOut}), "-=5");
-		tl.add( TweenMax.to(camera.position, 2, {z:0, y:-1000, ease: Power2.easeInOut, onComplete:function(){$(window).trigger('resize');} }), "-=5");
-		tl.to(girlArea.rotation, 10, {y:-1.2}, "-=5");
-		tl.add( TweenMax.to(camera.rotation, 2, {x:0, y:-4, ease: Power2.easeInOut, onComplete:function(){
+		// 前導動態
+		var intro = new TimelineMax();
+		intro.to(camera.position, 2, {delay:1, x:0, y:0, z:800, ease: Power2.easeInOut, onComplete:function(){$(window).trigger('resize');} });
+		intro.to(boyArea.rotation, 10, {y:-0.2, z:0.1}, "-=2");
+		intro.add( TweenMax.to(camera.rotation, 2, {x:0, y:-2, ease: Power2.easeInOut}), "-=5");
+		intro.add( TweenMax.to(camera.position, 2, {z:0, y:-1000, ease: Power2.easeInOut, onComplete:function(){$(window).trigger('resize');} }), "-=5");
+		intro.to(girlArea.rotation, 10, {y:-1.2}, "-=5");
+		intro.add( TweenMax.to(camera.rotation, 2, {x:0, y:-4, ease: Power2.easeInOut, onComplete:function(){
 			$(window).trigger('resize');
-			help.play();
-			help.addEventListener("tick", function(event){
-				if(event.currentTarget.currentFrame >= 707){
-					help.removeAllEventListeners();
-					TweenMax.to(camera.position, 2, {delay:1, y:0, ease: Power2.easeInOut});
-					TweenMax.to(gifArea.rotation, 2, {delay:1, x:0, z:0, y:2.3, ease: Power2.easeInOut});
-					TweenMax.to(gifArea.position, 2, {delay:1, x:-700, y:-30, z:578, ease: Power2.easeInOut, onComplete:function(){
-						TweenMax.killTweensOf(helpArea.rotation);
-						GifJS();
-					}});
-					$(window).trigger('resize');
-				}
-			});
+			help.play(gifScene);
 		}}), "-=5");
-
-
+		// help 搖擺 loop
 		TweenMax.to(helpArea.rotation, 4, {y:2.6, ease: Power2.easeInOut, startAt:{y:2}, repeat:-1, yoyo:true});
+		// 結束scene
+		function gifScene(delay){
+			delay = delay == undefined ? 1 : delay;
+			TweenMax.to(camera.position, 2, {delay:delay, y:0, ease: Power2.easeInOut});
+			TweenMax.to(gifArea.rotation, 2, {delay:delay, x:0, z:0, y:2.3, ease: Power2.easeInOut});
+			TweenMax.to(gifArea.position, 2, {delay:delay, x:-700, y:-30, z:578, ease: Power2.easeInOut, onComplete:function(){
+				TweenMax.killTweensOf(helpArea.rotation);
+				ga('send', 'pageview', 'editGIF');
+				playing = true;
+			}});
+			$(window).trigger('resize');
+		}
 
-		createHelp();
-		createCopy();
+		// 4周黑影
+		TweenMax.set(".t1",{rotationZ:-55+Math.random()*30, y:-250, x:-100, transformOrigin:"50% 50%"});
+		TweenMax.set(".t2",{rotationZ:40+Math.random()*30, y:-200, x:$(window).width()-300, transformOrigin:"50% 50%"});
+		TweenMax.set(".t3",{rotationZ:150+Math.random()*30, y:$(window).height()-400, x:$(window).width()/2 - 200, transformOrigin:"50% 50%"});
+		TweenMax.set(".t4",{rotationZ:220+Math.random()*30, y:$(window).height()-500, x: -100, transformOrigin:"50% 50%"});
 
-		animate();
+		$(window).resize(function(){
+			var w = $(this).width();
+			var h = $(this).height();
+			TweenMax.to(".t1", 1,{rotationZ:-55+Math.random()*30, y:-400 + Math.random()*200, x:-100, transformOrigin:"50% 50%"});
+			TweenMax.to(".t2", 1,{rotationZ:40+Math.random()*30, y:-200, x:w-300, transformOrigin:"50% 50%"});
+			TweenMax.to(".t3", 1,{rotationZ:150+Math.random()*60, y:$(window).height()-400, x:$(window).width()/2 - 200, transformOrigin:"50% 50%"});
+			TweenMax.to(".t4", 1,{rotationZ:220+Math.random()*30, y:$(window).height()-500, x:-100 - Math.random()*200, transformOrigin:"50% 50%"});
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+		});
+
+
+		// Share
+		$('#share-button').click(function(){
+			ga('send', 'event', 'gif', 'share');
+			window.open($(this).attr('data-clipboard-text'));
+		});
+
+		// start render loop
+		(function animate(){
+			requestAnimationFrame( animate );
+			renderer.render( scene, camera );
+		})();
+
+		return {
+			intro: intro,
+			gifScene: gifScene,
+			end: function(){
+				return playing;
+			}
+		};
 	}
 
-	function animate() {
-		requestAnimationFrame( animate );
-		renderer.render( scene, camera );
-	}
 
-	$(window).resize(function(){
-		var w = $(this).width();
-		var h = $(this).height();
-		TweenMax.to(".t1", 1,{rotationZ:-55+Math.random()*30, y:-400 + Math.random()*200, x:-100, transformOrigin:"50% 50%"});
-		TweenMax.to(".t2", 1,{rotationZ:40+Math.random()*30, y:-200, x:w-300, transformOrigin:"50% 50%"});
-		TweenMax.to(".t3", 1,{rotationZ:150+Math.random()*60, y:$(window).height()-400, x:$(window).width()/2 - 200, transformOrigin:"50% 50%"});
-		TweenMax.to(".t4", 1,{rotationZ:220+Math.random()*30, y:$(window).height()-500, x:-100 - Math.random()*200, transformOrigin:"50% 50%"});
-
-		camera.aspect = window.innerWidth / window.innerHeight;
-		camera.updateProjectionMatrix();
-		renderer.setSize( window.innerWidth, window.innerHeight );
-
-	});
-
-	// canvas
-	var canvas, stage, help;
-
-	function createHelp(){
+	// 教學canvas動態
+	function Help(){
+		var canvas, stage, help;
 		canvas = document.getElementById("help");
 		help = new lib.help(null, 0, false);
 		help.stop();
 		stage = new createjs.Stage(canvas);
 		stage.addChild(help);
 		stage.update();
-
 		createjs.Ticker.setFPS(55);
 		createjs.Ticker.addEventListener("tick", stage);
+		this.play = function(callback){
+			help.play();
+			help.addEventListener("tick", function(event){
+				if(event.currentTarget.currentFrame >= 707){
+					help.removeAllEventListeners();
+					if(typeof callback === 'function') callback.call();
+				}
+			});
+		}
+		this.stop = function(){
+			help.stop();
+		}
 	}
 	
 
 	// JSGIF
-	function GifJS(){
-		ga('send', 'pageview', 'editGIF');
+	function gifJS(){
 		var canvas = document.getElementById('bitmap');
 		var context = canvas.getContext('2d');
 		var gif_w = 470;
@@ -234,26 +259,56 @@ require("script!./help.js");
 		canvas.height = gif_h;
 
 		var encoder = new GIFEncoder();
+		
 		encoder.setRepeat(0); //auto-loop
-		encoder.setDelay(600);
+		encoder.setDelay(getDelay());
 		encoder.setSize(gif_w, gif_h);
+
+
+		var uploadPicture = document.querySelector("#upload-picture");
+		// upload
+		$('#gifArea').click(function(event){
+			event.preventDefault();
+			$(uploadPicture).trigger('click');
+		});
+		// input file upload
+		uploadPicture.onchange = function(event) {
+			if(event.target.files.length == 0) return;
+			TweenMax.to($('#share-button'), 0.5, {autoAlpha:0, onComplete:function(){
+				$('#share-button').css('display','none');
+			}});
+			encoder.start();
+			hasImg = false;
+	        startLoad(event.target.files, 0);
+	    };
 
 		window.ondragover = function () { $('.drag').addClass('hover'); $('#gifArea').addClass('hover'); return false; };
 		window.ondragleave = function () { $('.drag').removeClass('hover'); $('#gifArea').removeClass('hover'); return false; };
 		window.ondragend = function () { $('.drag').removeClass('hover'); $('#gifArea').removeClass('hover'); return false; };
 		window.ondrop = function (e) {
-		  $('.drag').removeClass('hover');
-		  $('#gifArea').removeClass('hover');
-		  e.preventDefault();
-		  if(e.dataTransfer.files.length == 0) return;
-		  TweenMax.to($('#copy-button'), 0.5, {autoAlpha:0, onComplete:function(){
-		  	$('#copy-button').css('display','none');
-		  } });
-		  encoder.start();
-		  hasImg = false;
-		  startLoad(e.dataTransfer.files, 0);
-		  return false;
+			e.preventDefault();
+			$('.drag').removeClass('hover');
+			$('#gifArea').removeClass('hover');
+			if(e.dataTransfer.files.length == 0) return;
+			TweenMax.to($('#share-button'), 0.5, {autoAlpha:0, onComplete:function(){
+				$('#share-button').css('display','none');
+			}});
+			encoder.start();
+			hasImg = false;
+			if(introControl.end()){
+				startLoad(e.dataTransfer.files, 0);
+			}else{
+				introControl.intro.timeScale( 20 ); 
+				introControl.gifScene(0);
+				startLoad(e.dataTransfer.files, 0);
+			}
+			return false;
 		};
+
+		function getDelay(){
+			var delay = parseInt(location.hash.replace('#', ''));
+			return isNaN(delay) ? 600 : delay;
+		}
 
 		function startLoad(files, num){
 		  if(num >= files.length){
@@ -270,16 +325,16 @@ require("script!./help.js");
  					+ "&picture="+encodeURIComponent("https://fb.webgene.com.tw/grimace/upload/"+data.gif)
 					+ "&description="+encodeURIComponent("叫我今日最佳鬼臉王")
 					+ "&name="+encodeURIComponent("鬼臉３連拍");
-					TweenMax.killTweensOf($('#copy-button'));
-					$('#copy-button').attr('data-clipboard-text', sharelink).css('display','initial');
-					TweenMax.to($('#copy-button'), 1, {autoAlpha:1, startAt:{autoAlpha:0} });
+					TweenMax.killTweensOf($('#share-button'));
+					$('#share-button').attr('data-clipboard-text', sharelink).css('display','initial');
+					TweenMax.to($('#share-button'), 1, {autoAlpha:1, startAt:{autoAlpha:0} });
 				}else{
-					$('#copyMsg .modal-content').html('儲存失敗');
-					$('#copyMsg').modal('show');
+					$('#msg .modal-content').html('儲存失敗');
+					$('#msg').modal('show');
 				}
 			},'json').fail(function() {
-				$('#copyMsg .modal-content').html('連線失敗');
-				$('#copyMsg').modal('show');
+				$('#msg .modal-content').html('連線失敗');
+				$('#msg').modal('show');
 			});
 			ga('send', 'event', 'gif', 'create');
 		    return;
@@ -306,6 +361,7 @@ require("script!./help.js");
 		      }
 		      //context.drawImage(this, 0, 0, imageObj.width, imageObj.height, 0, 0, gif_w, gif_h);
 		      context.drawImage(this, (gif_w-newW)/2, (gif_h-newH)/2, newW, newH);
+		      encoder.setDelay(getDelay());
 		      encoder.addFrame(context);
 		      hasImg = true;
 		      startLoad(files, num+1);
@@ -330,13 +386,6 @@ require("script!./help.js");
 		}
 	}
 
-	// COPY
-	function createCopy(){
-		$('#copy-button').click(function(){
-			ga('send', 'event', 'gif', 'share');
-			window.open($(this).attr('data-clipboard-text'));
-		});
-	}
 
 
 

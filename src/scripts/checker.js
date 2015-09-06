@@ -20,7 +20,6 @@ $(function(){
 	    });
 		*/
 	}else{
-		//$('body').load( "template/nosupport.html" );
 		$('body').html( require("html!../template/nosupport.html") );
 		ga('send', 'event', 'nosupport', 'GG');
 	}

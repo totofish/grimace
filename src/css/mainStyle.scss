@@ -217,7 +217,7 @@ body {
 	display: none;
 }
 
-#copy-button {
+#share-button {
 	z-index: 10;
 	position: relative;
 	width:190px;
@@ -236,7 +236,7 @@ body {
 	}
 }
 
-#copyMsg .modal-content{
+#msg .modal-content{
 	text-align: center;
 	padding:10px 10px;
 	background-color: $green-color1;
