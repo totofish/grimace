@@ -1,9 +1,7 @@
 <?php
-
 	if (strtoupper($_SERVER['HTTPS']) != 'ON'){
 		header("location: https://".$_SERVER['HTTP_HOST']."/grimace/");
 	}
-
 ?>
 <!DOCTYPE html>
 <html>
