@@ -4,7 +4,7 @@ var webpack            = require('webpack');
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 var bower_dir          = __dirname + '/bower_components';
 var HtmlWebpackPlugin  = require('html-webpack-plugin');
-
+var ExtractTextPlugin  = require("extract-text-webpack-plugin");
 
 
 var config = {
@@ -33,7 +33,8 @@ var config = {
         template : './src/index.php',
         inject: 'head'
     }),
-    new AssetsPlugin()   // 輸出資源json參考 webpack-assets.json
+    new AssetsPlugin(),   // 輸出資源json參考 webpack-assets.json
+    new ExtractTextPlugin("styles.css")
   ],
   output: {
     //path: path.join(__dirname, "build", "1.0.0"),
@@ -46,8 +47,6 @@ var config = {
     noParse: [],
     loaders: [
       //{ test: require.resolve('jquery'), loader: 'expose?jQuery' },
-      { test: /\.css$/, loader: 'style-loader!css-loader' },
-      { test: /\.scss$/, loader: 'style!css!sass' },
       //{ test: /\.html$/, name: "mandrillTemplates", loader: 'raw!html-minify' },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
@@ -55,7 +54,13 @@ var config = {
             'file?hash=sha512&digest=hex&name=images/[name].[ext]',
             'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
         ]
-      }
+      },
+      // style形式
+      //{ test: /\.css$/, loader: 'style-loader!css-loader' },
+      //{ test: /\.scss$/, loader: 'style!css!sass' },
+      // 輸出.css形式
+      { test: /\.scss$/, loader: ExtractTextPlugin.extract("css!sass") },
+      { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") }
     ]
   },
   'html-minify-loader': {

@@ -1,6 +1,7 @@
 require("imports?this=>window!./webpack-ie8.js");
 require("../css/bootstrap.min.css");
-require('!style!css!sass!../css/mainStyle.scss');
+//require('!style!css!sass!../css/mainStyle.scss'); // 如果想用內嵌就這樣設
+require('../css/mainStyle.scss');
 
 //require("script!./modernizr.custom.82438.js");
 require("imports?this=>window!modernizr");
