@@ -1,4 +1,4 @@
-#grimace [![license](https://img.shields.io/github/license/totofish/grimace.svg?style=flat-square)]()
+#grimace [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/totofish/grimace/master/LICENSE)
 
 gulp + webpack + FB GIF發佈
 
