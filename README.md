@@ -1,4 +1,5 @@
-# grimace
+#grimace [![license](https://img.shields.io/github/license/totofish/grimace.svg?style=flat-square)]()
+
 gulp + webpack + FB GIF發佈
 
 demo: [totofish.github.io/grimace](https://totofish.github.io/grimace/)
